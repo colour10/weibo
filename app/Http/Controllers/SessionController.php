@@ -30,8 +30,9 @@ class SessionController extends Controller
     public function store(SessionRequest $request)
     {
         // 逻辑
+        $authentication = $request->only(['email', 'password']);
         // 登录成功
-        if (Auth::attempt($request->except('_token'), true)) {
+        if (Auth::attempt($authentication, $request->has('remember'))) {
             session()->flash('success', '恭喜您，登录成功');
             return redirect()->route('users.show', ['user' => Auth::user()]);
         }
