@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 用户列表展示
      *
      * @return \Illuminate\Http\Response
      */
@@ -30,7 +30,7 @@ class UserController extends Controller
     }
 
     /**
-     * 注册逻辑
+     * 用户注册逻辑
      *
      * @param UserRequest $request
      * @return \Illuminate\Http\RedirectResponse
@@ -51,7 +51,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * 用户查看页面
      *
      * @param User $user
      *
@@ -63,28 +63,40 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * 用户编辑页面
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('users.edit', compact('user'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * 用户编辑逻辑
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param User $user
+     * @return \Illuminate\Http\RedirectResponse|Request
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        // 验证
+        $this->validate($request, [
+            'name'     => 'required|string|unique:users,name,' . $user->id . '|max:50',
+            'password' => 'nullable|confirmed|min:6',
+        ]);
+        // 逻辑
+        $data['name'] = $request->input('name');
+        if ($request->input('password')) {
+            $data['password'] = bcrypt($request->input('password'));
+        }
+        // 更新
+        $user->update($data);
+        session()->flash('success', '资料更新成功');
+        return redirect()->route('users.show', compact('user'));
     }
 
     /**
