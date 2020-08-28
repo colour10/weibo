@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -19,6 +19,7 @@ class UserController extends Controller
         // 不需要通过 auth 中间件过滤的路由列表
         $this->middleware('auth', [
             'except' => [
+                'index',
                 'show',
                 'create',
                 'store',
@@ -36,11 +37,13 @@ class UserController extends Controller
     /**
      * 用户列表展示
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function index()
     {
-        //
+        // 逻辑
+        $users = User::all();
+        return view('users.index', compact('users'));
     }
 
     /**

@@ -1,7 +1,13 @@
 <?php
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 
+/**
+ * 数据填充器
+ *
+ * Class DatabaseSeeder
+ */
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -11,6 +17,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+        // 暂时关闭批量赋值
+        Model::unguard();
+        $this->call(UserTableSeeder::class);
+        Model::reguard();
     }
 }
