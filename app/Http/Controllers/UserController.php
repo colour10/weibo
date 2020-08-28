@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -38,12 +39,13 @@ class UserController extends Controller
     {
         // 逻辑
         // 写入新用户
-        $user = User::query()->create([
+        $user = User::create([
             'name'     => $request->input('name'),
             'email'    => $request->input('email'),
             'password' => bcrypt($request->input('password')),
         ]);
         // 返回
+        Auth::login($user);
         session()->flash('success', '欢迎，您将在这里开启一段新的旅程~');
         return redirect()->route('users.show', compact('user'));
     }
