@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -40,12 +41,12 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        return view('users.show', compact('user'));
     }
 
     /**
