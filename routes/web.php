@@ -17,5 +17,11 @@ Route::get('/', 'StaticPagesController@home')->name('home');
 Route::get('/help', 'StaticPagesController@help')->name('help');
 Route::get('/about', 'StaticPagesController@about')->name('about');
 
+// 登录
+Route::get('login', 'SessionController@create')->name('login');
+Route::post('login', 'SessionController@store')->name('login');
+// 退出
+Route::delete('logout', 'SessionController@destroy')->name('logout');
+
 // 用户
 Route::resource('users', 'UserController');
