@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -28,20 +29,21 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 注册逻辑
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param UserRequest $request
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        // 逻辑
+        return $request->all();
     }
 
     /**
      * Display the specified resource.
      *
      * @param User $user
+     *
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function show(User $user)
@@ -53,6 +55,7 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -65,6 +68,7 @@ class UserController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -76,6 +80,7 @@ class UserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
