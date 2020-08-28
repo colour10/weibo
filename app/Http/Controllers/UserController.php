@@ -42,7 +42,7 @@ class UserController extends Controller
     public function index()
     {
         // 逻辑
-        $users = User::all();
+        $users = User::paginate(10);
         return view('users.index', compact('users'));
     }
 
@@ -133,12 +133,16 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return \Illuminate\Http\RedirectResponse|void
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        // 逻辑
+        $user->delete();
+        session()->flash('success', '用户已成功删除');
+        $fallback = route('users.index');
+        return redirect()->intended($fallback);
     }
 }

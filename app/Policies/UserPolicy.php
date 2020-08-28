@@ -53,11 +53,13 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
+        // 逻辑
         return $user->id === $model->id;
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * 删除用户
+     * 只有管理员可以删除，并且管理员不能删除自己
      *
      * @param \App\Models\User $user
      * @param \App\Models\User $model
@@ -65,7 +67,8 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        //
+        // 逻辑
+        return $user->is_admin && $user->id !== $model->id;
     }
 
     /**
