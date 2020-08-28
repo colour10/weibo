@@ -34,7 +34,9 @@ class SessionController extends Controller
         // 登录成功
         if (Auth::attempt($authentication, $request->has('remember'))) {
             session()->flash('success', '恭喜您，登录成功');
-            return redirect()->route('users.show', ['user' => Auth::user()]);
+            // 定义上一次尝试访问的地址
+            $fallback = route('users.show', ['user' => Auth::user()]);
+            return redirect()->intended($fallback);
         }
         // 登录失败
         session()->flash('danger', '很抱歉，账号和密码不匹配');

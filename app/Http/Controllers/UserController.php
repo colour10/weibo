@@ -10,6 +10,30 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     /**
+     * 构造函数
+     *
+     * UserController constructor.
+     */
+    public function __construct()
+    {
+        // 不需要通过 auth 中间件过滤的路由列表
+        $this->middleware('auth', [
+            'except' => [
+                'show',
+                'create',
+                'store',
+            ],
+        ]);
+
+        // 只允许游客访问的路由
+        $this->middleware('guest', [
+            'only' => [
+                'create',
+            ],
+        ]);
+    }
+
+    /**
      * 用户列表展示
      *
      * @return \Illuminate\Http\Response
@@ -67,9 +91,11 @@ class UserController extends Controller
      *
      * @param User $user
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|void
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit(User $user)
     {
+        $this->authorize('update', $user);
         return view('users.edit', compact('user'));
     }
 
@@ -80,10 +106,12 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Http\RedirectResponse|Request
      * @throws \Illuminate\Validation\ValidationException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(Request $request, User $user)
     {
         // 验证
+        $this->authorize('update', $user);
         $this->validate($request, [
             'name'     => 'required|string|unique:users,name,' . $user->id . '|max:50',
             'password' => 'nullable|confirmed|min:6',
