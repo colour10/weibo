@@ -32,11 +32,20 @@ class UserController extends Controller
      * 注册逻辑
      *
      * @param UserRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(UserRequest $request)
     {
         // 逻辑
-        return $request->all();
+        // 写入新用户
+        $user = User::query()->create([
+            'name'     => $request->input('name'),
+            'email'    => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+        ]);
+        // 返回
+        session()->flash('success', '欢迎，您将在这里开启一段新的旅程~');
+        return redirect()->route('users.show', compact('user'));
     }
 
     /**
