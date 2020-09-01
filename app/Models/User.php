@@ -94,4 +94,10 @@ class User extends Authenticatable
             $user->activation_token = Str::random(10);
         });
     }
+
+    // 发布者-微博，一对多
+    public function microblogs()
+    {
+        return $this->hasMany(Microblog::class);
+    }
 }
