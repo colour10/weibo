@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 
 /**
@@ -33,6 +34,10 @@ use Illuminate\Notifications\Notifiable;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property string|null $activation_token email验证token
+ * @property int $is_activated email是否已验证：0-未验证；1-已验证
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereActivationToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsActivated($value)
  */
 class User extends Authenticatable
 {
@@ -75,5 +80,18 @@ class User extends Authenticatable
     {
         $hash = md5(strtolower(trim($this->attributes['email'])));
         return 'http://www.gravatar.com/avatar/' . $hash . '?s=' . $size;
+    }
+
+    /**
+     * 模型事件监听
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        // 生成验证 email token 字符串
+        static::creating(function ($user) {
+            $user->activation_token = Str::random(10);
+        });
     }
 }

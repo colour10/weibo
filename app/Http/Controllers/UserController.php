@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequest;
 use App\Models\User;
-use Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Mail;
 
 class UserController extends Controller
 {
@@ -23,6 +25,7 @@ class UserController extends Controller
                 'show',
                 'create',
                 'store',
+                'confirmEmail',
             ],
         ]);
 
@@ -71,9 +74,51 @@ class UserController extends Controller
             'email'    => $request->input('email'),
             'password' => bcrypt($request->input('password')),
         ]);
-        // 返回
+        // 发送激活邮件并返回
+        $this->sendEmail($user);
+        session()->flash('success', '您已注册成功，请到邮箱激活您的账号');
+        return redirect()->route('users.show', compact('user'));
+    }
+
+    /**
+     * 发送激活短信
+     *
+     * @param $user
+     */
+    protected function sendEmail($user)
+    {
+        // 逻辑
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'admin@liuzongyang.com';
+        $name = 'colour10';
+        $to = $user->email;
+        $subject = "感谢注册 Weibo 应用！请确认你的邮箱。";
+
+        Mail::send($view, $data, function ($message) use ($from, $name, $to, $subject) {
+            $message->from($from, $name)->to($to)->subject($subject);
+        });
+    }
+
+    /**
+     * 用户邮箱激活
+     *
+     * @param $token
+     */
+    public function confirmEmail($token)
+    {
+        // 逻辑
+        // 存在则激活
+        $user = User::where('activation_token', $token)->firstOrFail();
+        $user->is_activated = true;
+        $user->activation_token = null;
+        // 添加邮箱激活时间
+        $user->email_verified_at = Carbon::now();
+        $user->save();
+
+        // 自动登录
         Auth::login($user);
-        session()->flash('success', '欢迎，您将在这里开启一段新的旅程~');
+        session()->flash('success', '恭喜您，邮箱激活成功');
         return redirect()->route('users.show', compact('user'));
     }
 

@@ -23,5 +23,7 @@ Route::post('login', 'SessionController@store')->name('login');
 // 退出
 Route::delete('logout', 'SessionController@destroy')->name('logout');
 
+// 邮箱验证
+Route::get('signup/confirm/{token}', 'UserController@confirmEmail')->name('confirm_email');
 // 用户
 Route::resource('users', 'UserController');
