@@ -38,10 +38,13 @@ class MicroblogController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Microblog $microblog
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function destroy(Microblog $microblog)
     {
-        //
+        $this->authorize('delete', $microblog);
+        $microblog->delete();
+        session()->flash('success', '微博已被成功删除！');
+        return redirect()->back();
     }
 }
