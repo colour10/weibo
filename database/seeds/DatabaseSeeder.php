@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         // 暂时关闭批量赋值
         Model::unguard();
         $this->call(UserTableSeeder::class);
+        $this->call(MicroblogTableSeeder::class);
         Model::reguard();
     }
 }

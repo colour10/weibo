@@ -38,6 +38,8 @@ use Illuminate\Support\Str;
  * @property int $is_activated email是否已验证：0-未验证；1-已验证
  * @method static \Illuminate\Database\Eloquent\Builder|User whereActivationToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereIsActivated($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Microblog[] $microblogs
+ * @property-read int|null $microblogs_count
  */
 class User extends Authenticatable
 {

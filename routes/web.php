@@ -23,13 +23,17 @@ Route::post('login', 'SessionController@store')->name('login');
 // 退出
 Route::delete('logout', 'SessionController@destroy')->name('logout');
 
-// 邮箱验证
-Route::get('signup/confirm/{token}', 'UserController@confirmEmail')->name('confirm_email');
 // 用户
 Route::resource('users', 'UserController');
+
+// 邮箱验证
+Route::get('signup/confirm/{token}', 'UserController@confirmEmail')->name('confirm_email');
 
 // 重置密码
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');
+
+// 微博
+Route::resource('microblogs', 'MicroblogController')->only(['store', 'destroy']);

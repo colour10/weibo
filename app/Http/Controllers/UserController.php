@@ -130,7 +130,13 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('users.show', compact('user'));
+        // 逻辑，查出当前用户发布的所有微博
+        $microblogs = $user
+            ->microblogs()
+            ->orderByDesc('created_at')
+            ->paginate(10);
+        // 渲染
+        return view('users.show', compact('user', 'microblogs'));
     }
 
     /**

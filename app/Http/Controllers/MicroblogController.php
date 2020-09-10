@@ -2,80 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MicroblogRequest;
 use App\Models\Microblog;
-use Illuminate\Http\Request;
+use Auth;
 
 class MicroblogController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 构造函数
      *
-     * @return \Illuminate\Http\Response
+     * MicroblogController constructor.
      */
-    public function index()
+    public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 微博保存
      *
-     * @return \Illuminate\Http\Response
+     * @param MicroblogRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function create()
+    public function store(MicroblogRequest $request)
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Microblog  $microblog
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Microblog $microblog)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Microblog  $microblog
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Microblog $microblog)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Microblog  $microblog
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Microblog $microblog)
-    {
-        //
+        // 逻辑
+        Auth::user()->microblogs()->create([
+            'content' => $request->input('content'),
+        ]);
+        session()->flash('success', '发布成功');
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Microblog  $microblog
+     * @param \App\Models\Microblog $microblog
      * @return \Illuminate\Http\Response
      */
     public function destroy(Microblog $microblog)
