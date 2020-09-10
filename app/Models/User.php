@@ -102,4 +102,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Microblog::class);
     }
+
+    /**
+     * 微博倒序排列
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function feed()
+    {
+        return $this->microblogs()
+            ->orderBy('created_at', 'desc');
+    }
 }
