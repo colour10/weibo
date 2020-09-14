@@ -23,6 +23,10 @@ Route::post('login', 'SessionController@store')->name('login');
 // 退出
 Route::delete('logout', 'SessionController@destroy')->name('logout');
 
+// 关注者和粉丝
+Route::get('/users/{user}/followings', 'UserController@followings')->name('users.followings');
+Route::get('/users/{user}/followers', 'UserController@followers')->name('users.followers');
+
 // 用户
 Route::resource('users', 'UserController');
 
