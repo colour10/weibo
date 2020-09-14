@@ -10,40 +10,6 @@ class UserPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view any models.
-     *
-     * @param \App\Models\User $user
-     * @return mixed
-     */
-    public function viewAny(User $user)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param \App\Models\User $user
-     * @param \App\Models\User $model
-     * @return mixed
-     */
-    public function view(User $user, User $model)
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can create models.
-     *
-     * @param \App\Models\User $user
-     * @return mixed
-     */
-    public function create(User $user)
-    {
-        //
-    }
-
-    /**
      * 用户编辑权限判定
      * 当前用户只能编辑自己的资料
      *
@@ -72,26 +38,16 @@ class UserPolicy
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * 关注用户
+     * 只能关注自己以外的用户
      *
      * @param \App\Models\User $user
      * @param \App\Models\User $model
      * @return mixed
      */
-    public function restore(User $user, User $model)
+    public function follow(User $user, User $model)
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     *
-     * @param \App\Models\User $user
-     * @param \App\Models\User $model
-     * @return mixed
-     */
-    public function forceDelete(User $user, User $model)
-    {
-        //
+        // 逻辑
+        return $user->id !== $model->id;
     }
 }

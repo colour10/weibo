@@ -26,6 +26,9 @@ Route::delete('logout', 'SessionController@destroy')->name('logout');
 // 关注者和粉丝
 Route::get('/users/{user}/followings', 'UserController@followings')->name('users.followings');
 Route::get('/users/{user}/followers', 'UserController@followers')->name('users.followers');
+// 关注和取消
+Route::post('/users/followers/{user}', 'FollowerController@store')->name('followers.store');
+Route::delete('/users/followers/{user}', 'FollowerController@destroy')->name('followers.destroy');
 
 // 用户
 Route::resource('users', 'UserController');
