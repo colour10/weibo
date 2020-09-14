@@ -113,4 +113,56 @@ class User extends Authenticatable
         return $this->microblogs()
             ->orderBy('created_at', 'desc');
     }
+
+    // 用户关注的人
+    public function followings()
+    {
+        // 逻辑
+        return $this->belongsToMany(self::class, 'follows', 'followed_id', 'follower_id')->withTimestamps();
+    }
+
+    // 用户的粉丝
+    public function followers()
+    {
+        // 逻辑
+        return $this->belongsToMany(self::class, 'follows', 'follower_id', 'followed_id')->withTimestamps();
+    }
+
+    /**
+     * 用户关注行为
+     *
+     * @param $user_ids
+     */
+    public function follow($user_ids)
+    {
+        if (!is_array($user_ids)) {
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->sync($user_ids, false);
+    }
+
+    /**
+     * 用户取消关注行为
+     *
+     * @param $user_ids
+     */
+    public function unFollow($user_ids)
+    {
+        // 逻辑
+        if (!is_array($user_ids)) {
+            $user_ids = compact('user_ids');
+        }
+        $this->followings()->detach($user_ids);
+    }
+
+    /**
+     * 判断当前登录用户是否关注了某一个用户
+     *
+     * @param $user_id
+     * @return boolean
+     */
+    public function isFollowing($user_id)
+    {
+        return $this->followings->contains($user_id);
+    }
 }

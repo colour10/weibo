@@ -39,6 +39,7 @@ class MicroblogController extends Controller
      *
      * @param \App\Models\Microblog $microblog
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function destroy(Microblog $microblog)
     {
