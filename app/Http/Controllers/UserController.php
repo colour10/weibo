@@ -196,6 +196,12 @@ class UserController extends Controller
         return redirect()->intended($fallback);
     }
 
+    /**
+     * 关注人列表
+     *
+     * @param User $user
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function followings(User $user)
     {
         $users = $user->followings()->paginate(30);
@@ -203,6 +209,12 @@ class UserController extends Controller
         return view('users.show_follow', compact('users', 'title'));
     }
 
+    /**
+     * 粉丝列表
+     *
+     * @param User $user
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function followers(User $user)
     {
         $users = $user->followers()->paginate(30);

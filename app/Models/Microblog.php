@@ -23,6 +23,9 @@ namespace App\Models;
  */
 class Microblog extends Model
 {
+    // 预加载
+    protected $with = ['user'];
+
     // 微博-发布者，一对多反向
     public function user()
     {
